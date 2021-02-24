@@ -177,90 +177,55 @@ TestEASNED
     Create SOAP Client  ${wsdl_file}
     ${arguments}  create dictionary  amount=${amount}  from=${source_id}  to=${dest_id}  id=None
     Create Session  mysession  ${ROOT_ENDPOINT}
-    ${get_before_response}  GET On Session  mysession  ${PATH}${source_id}
+    ${get_before_response}  GET On Session  mysession  ${PATH}
     ${response}  run keyword and ignore error  Call SOAP Method  createTransaction  ${arguments}
-    should be equal  ${response}[0]  FAIL  transaction should not work when destination not found
-    ${get_after_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${balance_before}  get from dictionary  ${get_before_response.json()}  balance
-    ${balance_after}  get from dictionary  ${get_after_response.json()}  balance
-    should be equal  ${balance_before}  ${balance_after}  balance for source account must be same
+    should be equal  ${response}[0]  FAIL  transaction should not be work when destination non exist
+    ${get_after_response}  GET On Session  mysession  ${PATH}
+    should be equal  ${get_before_response.json()}  ${get_after_response.json()}  transaction should not be work when destination non exist
 
 
 
-
-TestENASED
+TestENAS
     [Arguments]  ${wsdl_file}  ${source_id}  ${dest_id}  ${amount}
     Create SOAP Client  ${wsdl_file}
     ${arguments}  create dictionary  amount=${amount}  from=${source_id}  to=${dest_id}  id=None
     Create Session  mysession  ${ROOT_ENDPOINT}
-    ${get_before_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${get_des_before_response}  GET On Session  mysession  ${PATH}${dest_id}
+    ${get_before_response}  GET On Session  mysession  ${PATH}
     ${response}  run keyword and ignore error  Call SOAP Method  createTransaction  ${arguments}
-    should be equal  ${response}[0]  FAIL  transaction should not work when source has a balance less than ${amount}
-    ${get_after_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${get_des_after_response}  GET On Session  mysession  ${PATH}${des_id}
-    ${balance_before}  get from dictionary  ${get_before_response.json()}  balance
-    ${balance_des_before}  get from dictionary  ${get_des_before_response.json()}  balance
-    ${balance_after}  get from dictionary  ${get_after_response.json()}  balance
-    ${balance_des_after}  get from dictionary  ${get_des_after_response.json()}  balance
-    should be equal  ${balance_before}  ${balance_after}  balance for source account must be same
-    should be equal  ${balance_before}  ${balance_after}  balance for destination account must be same
+    should be equal  ${response}[0]  FAIL  transaction should not be work when source has balance lower than ${amount}
+    ${get_after_response}  GET On Session  mysession  ${PATH}
+    should be equal  ${get_before_response.json()}  ${get_after_response.json()}  transaction should not be work when source has balance lower than ${amount}
 
 
-TestENASNED
+
+
+TestESWIA
     [Arguments]  ${wsdl_file}  ${source_id}  ${dest_id}  ${amount}
     Create SOAP Client  ${wsdl_file}
     ${arguments}  create dictionary  amount=${amount}  from=${source_id}  to=${dest_id}  id=None
     Create Session  mysession  ${ROOT_ENDPOINT}
-    ${get_before_response}  GET On Session  mysession  ${PATH}${source_id}
+    ${get_before_response}  GET On Session  mysession  ${PATH}
     ${response}  run keyword and ignore error  Call SOAP Method  createTransaction  ${arguments}
-    should be equal  ${response}[0]  FAIL  transaction should not work when source has a balance less than ${amount}
-    ${get_after_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${balance_before}  get from dictionary  ${get_before_response.json()}  balance
-    ${balance_after}  get from dictionary  ${get_after_response.json()}  balance
-    should be equal  ${balance_before}  ${balance_after}  balance for source account must be same
+    should be equal  ${response}[0]  FAIL  transaction should not work when amount not valid
+    ${get_after_response}  GET On Session  mysession  ${PATH}
+    should be equal  ${get_before_response.json()}  ${get_after_response.json()}  transaction should not work when amount not valid
+
+
 
 
 
 TestNES
     [Arguments]  ${wsdl_file}  ${source_id}  ${dest_id}  ${amount}
+    Create Session  mysession  ${ROOT_ENDPOINT}
+    ${get_before_response}  GET On Session  mysession  ${PATH}
     Create SOAP Client  ${wsdl_file}
     ${arguments}  create dictionary  amount=${amount}  from=${source_id}  to=${dest_id}  id=None
     ${response}  run keyword and ignore error  Call SOAP Method  createTransaction  ${arguments}
     should be equal  ${response}[0]  FAIL  transaction should not work when source account non exist
+    ${get_after_response}  GET On Session  mysession  ${PATH}
+    should be equal  ${get_before_response.json()}  ${get_after_response.json()}  transaction should not work when source account non exist
 
 
 
 
 
-TestESEDWIA
-    [Arguments]  ${wsdl_file}  ${source_id}  ${dest_id}  ${amount}
-    Create SOAP Client  ${wsdl_file}
-    ${arguments}  create dictionary  amount=${amount}  from=${source_id}  to=${dest_id}  id=None
-    Create Session  mysession  ${ROOT_ENDPOINT}
-    ${get_before_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${get_des_before_response}  GET On Session  mysession  ${PATH}${dest_id}
-    ${response}  run keyword and ignore error  Call SOAP Method  createTransaction  ${arguments}
-    should be equal  ${response}[0]  FAIL  transaction should not work when amount not number
-    ${get_after_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${get_des_after_response}  GET On Session  mysession  ${PATH}${dest_id}
-    ${balance_before}  get from dictionary  ${get_before_response.json()}  balance
-    ${balance_des_before}  get from dictionary  ${get_des_before_response.json()}  balance
-    ${balance_after}  get from dictionary  ${get_after_response.json()}  balance
-    ${balance_des_after}  get from dictionary  ${get_des_after_response.json()}  balance
-    should be equal  ${balance_before}  ${balance_after}  balance for source account must be same
-    should be equal  ${balance_des_before}  ${balance_des_after}  balance for destination account must be same
-
-
-TestESNEDWIA
-    [Arguments]  ${wsdl_file}  ${source_id}  ${dest_id}  ${amount}
-    Create SOAP Client  ${wsdl_file}
-    ${arguments}  create dictionary  amount=${amount}  from=${source_id}  to=${dest_id}  id=None
-    Create Session  mysession  ${ROOT_ENDPOINT}
-    ${get_before_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${response}  run keyword and ignore error  Call SOAP Method  createTransaction  ${arguments}
-    should be equal  ${response}[0]  FAIL  transaction should not work when amount not number
-    ${get_after_response}  GET On Session  mysession  ${PATH}${source_id}
-    ${balance_before}  get from dictionary  ${get_before_response.json()}  balance
-    ${balance_after}  get from dictionary  ${get_after_response.json()}  balance
-    should be equal  ${balance_before}  ${balance_after}  balance for source account must be same
